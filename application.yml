@@ -1,0 +1,109 @@
+server:
+  #https默认端口：443，http默认端口：80
+  #Default port for https: 443, default port for http: 80
+  port: 8090
+  http-port: 8080
+  tomcat:
+    threads:
+      max: 1000
+  ssl:
+    #开启https，配置跟证书一一对应
+    # open https, configuration and certificate one by one correspondence
+    enabled: false
+    #别名
+    # Alias
+    key-alias: rds_https
+    #密码
+    #password
+    key-password: rds2021
+    key-store-password: rds2021
+    #默认使用本系统https证书，客户可以根据自己需求改对应值。
+    #The default use of this system https certificate, customers can change the corresponding value according to their needs.
+    key-store: classpath:rds-https.keystore
+    key-store-type: JKS
+    enabled-protocols: TLSv1.2
+    ciphers: TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,TLS_DHE_RSA_WITH_AES_128_GCM_SHA256
+
+databaseUrl: jdbc:mysql://mariadb:3306/rds?userSSL=false&serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=UTF-8
+databaseUsername: root
+databasePassword: rpth1q14QRnfAI/+/cgwdDoquCGOy03scSKIX4ow8dx+/9fM1E0mtmB3wCPWP9TBGQg6g5t1u7y5FxE58d2dAA==
+databaseType: MYSQL
+databaseMaxActive: 3000
+
+
+rds:
+  env: prod
+  appDir: data/rds/app
+  staticDir: data/rds/static
+  scriptDir: data/rds/script
+  configDir: data/rds/config
+  sceneDir: .data/rds/scene
+  templateDir: data/rds/app/.template
+  licenseDir: .data/rds/license
+  rdsHistoryDir: data/rds/history
+  okHttpMaxPoolIdleSize: 50
+  okHttpKeepAliveSeconds: 15
+  enableCors: false
+
+opc:
+  enable: false
+  # 是否匿名连接
+  isAnonymousConnect: true
+  # 用户名（非匿名连接）
+  serverUsername: testUser
+  # 密码（非匿名连接）
+  serverPassword: 123456
+  #opc客户端连接服务的地址
+  opcuaEndpointUrl: opc.tcp://127.0.0.1:49320
+  #订阅PLC节点数据，数据变化后发布时间间隔ms
+  opcuaEndpointSubInterval: 2000
+  #读写重试次数，-1表示无限制
+  retry: -1
+  #读写重试时间间隔，ms
+  retryInterval: 1000
+
+
+ldap:
+  enable: false                                           # 启动 ldap 验证
+  url: ldap://127.0.0.1                                   # ldap 服务器的 IP 或者域名
+  port: 636                                               # 其他端口 389，适配非 SSL 协议
+  protocol: ssl                                           # SSL 协议，不用则不写该字段
+  principal: CN=test cn,OU=test ou,DC=test,DC=com         # CN,OU,DC 组成的完全限定名，用户唯一性，根据实际 LDAP 配置
+  credentials: Aa111111                                   # 验证目标 ldap 的证书密码
+  searchBase: OU=test ou,DC=test,DC=com                   # ldap 的域节点，验证用户使用
+  skipUsernames: admin                                    # 不经过 ldap 服务器验证的用户，多个用户用逗号隔开
+
+oauth:
+  # 启用单点登录
+  enable: false
+  # 跳转至授权中心的地址
+  authorizationUri: https://github.com/login/oauth/authorize
+  # 获取 token 的地址
+  tokenUri: https://github.com/login/oauth/access_token
+  # 获取用户信息的地址
+  userInfoUri: https://api.github.com/user
+  # 获取用户信息JSON后，取用户名的键名
+  userAttributeName: login
+  # 授权码模式要使用的clientId
+  clientId: clientId
+  # 授权码模式要使用的clientSecret
+  clientSecret: clientSecret
+  # 获取用户信息的范围
+  scope: profile openid
+  # 授权模式
+  grantType: authorization_code
+  # 回调地址的域名或IP和端口
+  redirectBaseUri: http://localhost:8080
+  # 回调地址的endpoint
+  redirectEndpoint: /oath/authorize
+  # 获取用户信息后，可以直接登录到RDS的用户名；其他用户名会自动创建但被禁用
+  admins: zhangsan
+  # 授权通过后的RDS主页
+  homeUrl: /index.html#/view
+  # 授权通过后的PDA主页
+  pdaHomeUrl: /pda/
+  # 退出授权中心的地址
+  logoutUrl: logoutUrl
+  # 授权失败的跳转地址
+  errorUrl: errorUrl
+  

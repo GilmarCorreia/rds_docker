@@ -1,0 +1,46 @@
+version: '3'
+services:
+  rds:
+    container_name: rds
+    image: rds:F1.9.70-B1.8.21-robod-4.4.5-core-0.1.8.230922-0.1.9
+    privileged: true
+    ports:
+      - 8080:8080
+      - 8090:8090
+      - 502:502
+      - 8088:8088
+      - 9301:9301
+      - 19204:19204
+      - 19205:19205
+      - 19207:19207
+      - 19208:19208
+      - 19210:19210
+      - 19301:19301
+    environment:
+      - TZ=Atlantic/Stanley
+    command: /bin/bash init.sh
+    depends_on:
+      - mariadb
+    restart: always
+    networks:
+      - rds-net
+    volumes:
+      - ./.data:/opt/.data
+      - ./application.yml:/opt/data/rds/app/application.yml
+      - ./application-biz.yml:/opt/data/rds/script/application-biz.yml
+  mariadb:
+    container_name: mariadb
+    privileged: true
+    image: mariadb:10.7
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysql
+      - TZ=Atlantic/Stanley
+    restart: always
+    networks:
+      - rds-net
+    volumes:
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
+networks:
+  rds-net:
